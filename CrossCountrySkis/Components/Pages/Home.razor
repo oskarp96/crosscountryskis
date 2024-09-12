@@ -1,0 +1,51 @@
+﻿@page "/"
+@using CrossCountrySkis.Models
+@using CrossCountrySkis.Models.Enums
+
+<PageTitle>Home</PageTitle>
+
+<h1>Hello, world!</h1>
+
+<div>
+    Please select parameters to get recommendations for your ski length:
+
+    <EditForm Model="@_formModel" OnValidSubmit="HandleSubmit">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+
+        <div>
+            <label>Length:</label>
+            <InputNumber @bind-Value="_formModel.Length" />
+        </div>
+        <div>
+            <label>Age:</label>
+            <InputNumber @bind-Value="_formModel.Age" />
+        </div>
+        <div>
+            <label>Ski type:</label>
+
+            <InputRadioGroup @bind-Value="_formModel.SkiType">
+                @foreach (var skiType in Enum.GetValues<SkiType>())
+                {
+                    <div>
+                        <label>
+                            <InputRadio Value="skiType" />
+                            @skiType
+                        </label>
+                    </div>
+                }
+            </InputRadioGroup>
+        </div>
+
+        <button type="submit">Submit</button>
+    </EditForm>
+</div>
+
+@code {
+    private SkiLengthFormModel _formModel = new();
+
+    private void HandleSubmit()
+    {
+        Console.WriteLine("Submitting the form!");
+    }
+}
