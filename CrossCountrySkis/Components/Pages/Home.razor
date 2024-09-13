@@ -1,25 +1,28 @@
 ﻿@page "/"
 @using CrossCountrySkis.Models
 @using CrossCountrySkis.Models.Enums
+@using CrossCountrySkis.Services.Interfaces
+@rendermode InteractiveServer
+@inject ISkiService SkiService
 
 <PageTitle>Home</PageTitle>
 
-<h1>Hello, world!</h1>
+<h1>Ski length calculator</h1>
 
 <div>
     Please select parameters to get recommendations for your ski length:
 
-    <EditForm Model="@_formModel" OnValidSubmit="HandleSubmit">
+    <EditForm FormName="SkiLengthForm" Model="@_formModel" OnValidSubmit="HandleValidSubmit">
         <DataAnnotationsValidator />
         <ValidationSummary />
 
         <div>
             <label>Length:</label>
-            <InputNumber @bind-Value="_formModel.Length" />
+            <InputNumber class="form-control" @bind-Value="_formModel.Length" />
         </div>
         <div>
             <label>Age:</label>
-            <InputNumber @bind-Value="_formModel.Age" />
+            <InputNumber class="form-control" @bind-Value="_formModel.Age" />
         </div>
         <div>
             <label>Ski type:</label>
@@ -37,15 +40,23 @@
             </InputRadioGroup>
         </div>
 
-        <button type="submit">Submit</button>
+        <button class="btn btn-primary" type="submit">Submit</button>
     </EditForm>
+
+    @if(_result is not null)
+    {
+        <div>
+            Your suggested ski length: @(_result.SkiLengthSpan is not null ? $"{_result.SkiLengthSpan.LowerSpan}-{_result.SkiLengthSpan.UpperSpan}" : _result.SkiLength)
+        </div>
+    }
 </div>
 
 @code {
     private SkiLengthFormModel _formModel = new();
+    private SuggestedSkiLengthResult? _result;
 
-    private void HandleSubmit()
+    private void HandleValidSubmit()
     {
-        Console.WriteLine("Submitting the form!");
+        _result = SkiService.CalculateSkiLength(_formModel);
     }
 }

@@ -1,10 +1,13 @@
 using CrossCountrySkis.Components;
+using CrossCountrySkis.Services;
+using CrossCountrySkis.Services.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
+builder.Services.AddScoped<ISkiService, SkiService>();
 
 var app = builder.Build();
 
