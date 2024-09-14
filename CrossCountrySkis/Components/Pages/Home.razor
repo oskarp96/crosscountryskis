@@ -9,47 +9,53 @@
 
 <h1>Ski length calculator</h1>
 
-<div>
-    Please select parameters to get recommendations for your ski length:
+<div class="row">
+    <div class="col-12 col-lg-6">
+        Please select parameters to get recommendations for your ski length:
 
-    <EditForm FormName="SkiLengthForm" Model="@_formModel" OnValidSubmit="HandleValidSubmit">
-        <DataAnnotationsValidator />
-        <ValidationSummary />
+        <EditForm FormName="SkiLengthForm" Model="@_formModel" OnValidSubmit="HandleValidSubmit">
+            <DataAnnotationsValidator />
+            <ValidationSummary />
 
-        <div>
-            <label>Length:</label>
-            <InputNumber class="form-control" @bind-Value="_formModel.Length" />
-        </div>
-        <div>
-            <label>Age:</label>
-            <InputNumber class="form-control" @bind-Value="_formModel.Age" />
-        </div>
-        <div>
-            <label>Ski type:</label>
+            <div class="py-2">
+                <label class="fw-bold mb-1">Length (cm)</label>
+                <InputNumber class="form-control" @bind-Value="_formModel.Length" />
+            </div>
+            <div class="py-2">
+                <label class="fw-bold mb-1">Age</label>
+                <InputNumber class="form-control" @bind-Value="_formModel.Age" />
+            </div>
+            <div class="py-2">
+                <label class="fw-bold mb-1">Ski type</label>
 
-            <InputRadioGroup @bind-Value="_formModel.SkiType">
-                @foreach (var skiType in Enum.GetValues<SkiType>())
-                {
-                    <div>
-                        <label>
-                            <InputRadio Value="skiType" />
-                            @skiType
-                        </label>
-                    </div>
-                }
-            </InputRadioGroup>
-        </div>
+                <div class="d-flex gap-3">
+                    <InputRadioGroup @bind-Value="_formModel.SkiType">
+                        @foreach (var skiType in Enum.GetValues<SkiType>())
+                        {
+                            <div>
+                                <label>
+                                    <InputRadio Value="skiType" />
+                                    @skiType
+                                </label>
+                            </div>
+                        }
+                    </InputRadioGroup>
+                </div>
 
-        <button class="btn btn-primary" type="submit">Submit</button>
-    </EditForm>
+            </div>
 
-    @if(_result is not null)
-    {
-        <div>
-            Your suggested ski length: @(_result.SkiLengthSpan is not null ? $"{_result.SkiLengthSpan.LowerSpan}-{_result.SkiLengthSpan.UpperSpan}" : _result.SkiLength)
-        </div>
-    }
+            <button class="btn btn-primary" type="submit">Submit</button>
+        </EditForm>
+
+        @if (_result is not null)
+        {
+            <div class="py-2">
+                Your suggested ski length: @(_result.SkiLengthSpan is not null ? $"{_result.SkiLengthSpan.LowerSpan}-{_result.SkiLengthSpan.UpperSpan}" : _result.SkiLength)
+            </div>
+        }
+    </div>
 </div>
+
 
 @code {
     private SkiLengthFormModel _formModel = new();

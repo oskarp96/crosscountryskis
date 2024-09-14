@@ -22,12 +22,11 @@ namespace CrossCountrySkis.Services
             if (suggestChildrenLengthSpan)
             {
                 // Use children 5-8 years span
-                // TODO: Make sure span dont exceed maxlength
+                // TODO: Make sure span dont exceed maxlength - or don't need to check (kids are probably not that long)?
                 var skiLengthSpan = new SkiLengthSpan(formModel.Length + 10, suggestedSkiLength);
 
                 return new SuggestedSkiLengthResult { SkiLengthSpan = skiLengthSpan };
             }
-
 
             if (suggestedSkiLength > MaxClassicSkiLength)
             {
@@ -49,9 +48,20 @@ namespace CrossCountrySkis.Services
             }
 
             // Using more specific freestyle span (10-15) because it still fits in the children span (10-20)
-            // TODO: If span is greater than maxlength, set maxlength instead
             skiLengthSpan.LowerSpan = formModel.Length + 10;
             skiLengthSpan.UpperSpan = formModel.Length + 15;
+
+            // TODO: Maybe place this logic at another place?
+            if (skiLengthSpan.LowerSpan > MaxFreestyleSkiLength)
+            {
+                skiLengthSpan.LowerSpan = MaxFreestyleSkiLength;
+                // If lower span is exceeded, so is upper span
+                skiLengthSpan.UpperSpan = MaxFreestyleSkiLength;
+            }
+            else if (skiLengthSpan.UpperSpan > MaxFreestyleSkiLength) 
+            {
+                skiLengthSpan.UpperSpan = MaxFreestyleSkiLength;
+            }
 
             return new SuggestedSkiLengthResult { SkiLengthSpan = skiLengthSpan };
         }
