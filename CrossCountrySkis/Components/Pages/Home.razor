@@ -2,6 +2,7 @@
 @using CrossCountrySkis.Models
 @using CrossCountrySkis.Models.Enums
 @using CrossCountrySkis.Services.Interfaces
+
 @rendermode InteractiveServer
 @inject ISkiService SkiService
 
@@ -49,9 +50,7 @@
 
         @if (_result is not null)
         {
-            <div class="py-2">
-                Your suggested ski length: @(_result.SkiLengthSpan is not null ? $"{_result.SkiLengthSpan.LowerSpan}-{_result.SkiLengthSpan.UpperSpan}" : _result.SkiLength)
-            </div>
+            <SkiLengthResult Result="@_result" />
         }
     </div>
 </div>

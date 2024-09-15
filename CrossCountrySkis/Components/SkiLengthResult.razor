@@ -1,0 +1,39 @@
+﻿@using CrossCountrySkis.Models
+
+<section>
+    <div class="mt-4 border-1">
+        <div class="display-6">
+            <span>Your suggested ski length: </span>
+            @if (_useLengthSpan)
+            {
+                <span>
+                    @(Result?.SkiLengthSpan?.LowerSpan + " - " + Result?.SkiLengthSpan?.UpperSpan) cm
+                </span>
+            }
+            else
+            {
+                <span>
+                    @Result?.SkiLength cm
+                </span>
+            }
+        </div>
+
+        <div>
+            Happy skiing! :)
+        </div>
+    </div>
+</section>
+
+
+@code {
+    [Parameter]
+    public SuggestedSkiLengthResult? Result { get; set; }
+
+    private bool _useLengthSpan;
+
+    protected override void OnParametersSet()
+    {
+        _useLengthSpan = Result?.SkiLengthSpan is not null;
+    }
+
+}
