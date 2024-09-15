@@ -16,12 +16,19 @@ namespace CrossCountrySkis.Services
 
         private SuggestedSkiLengthResult CalculateClassicLength(SkiLengthFormModel formModel)
         {
-            var suggestChildrenLengthSpan = formModel.Age >= 5 && formModel.Age <= 8;
+            var suggestChildren0To4LengthSpan = formModel.Age >= 0 && formModel.Age <= 4;
+            var suggestChildren5To8LengthSpan = formModel.Age >= 5 && formModel.Age <= 8;
             var suggestedSkiLength = formModel.Length + 20;
 
-            if (suggestChildrenLengthSpan)
+            if(suggestChildren0To4LengthSpan)
             {
-                // Use children 5-8 years span
+                // TODO: Make sure length dont exceed maxlength - or don't need to check (kids 0-4 are probably not that long)?
+                // Use +0cm because it is more strict than the 10-20cm normal span
+                return new SuggestedSkiLengthResult { SkiLength = formModel.Length };
+            }
+
+            if (suggestChildren5To8LengthSpan)
+            {
                 // TODO: Make sure span dont exceed maxlength - or don't need to check (kids are probably not that long)?
                 var skiLengthSpan = new SkiLengthSpan(formModel.Length + 10, suggestedSkiLength);
 
@@ -38,11 +45,11 @@ namespace CrossCountrySkis.Services
 
         private SuggestedSkiLengthResult CalculateFreestyleLength(SkiLengthFormModel formModel)
         {
-            var suggest0To4LengthSpan = formModel.Age >= 0 && formModel.Age <= 4;
-            var suggest5To8LengthSpan = formModel.Age >= 5 && formModel.Age <= 8;
+            var suggestChildren0To4LengthSpan = formModel.Age >= 0 && formModel.Age <= 4;
+            var suggestChildren5To8LengthSpan = formModel.Age >= 5 && formModel.Age <= 8;
             var skiLengthSpan = new SkiLengthSpan();
 
-            if(suggest0To4LengthSpan)
+            if(suggestChildren0To4LengthSpan)
             {
                 return new SuggestedSkiLengthResult { SkiLength = formModel.Length };
             }
