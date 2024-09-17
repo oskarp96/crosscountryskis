@@ -1,26 +1,28 @@
 ﻿@using CrossCountrySkis.Models
 
-<section>
-    <div class="mt-4 border-1">
-        <div class="display-6">
-            <span>Your suggested ski length: </span>
-            @if (_useLengthSpan)
-            {
-                <span>
-                    @(Result?.SkiLengthSpan?.LowerSpan + " - " + Result?.SkiLengthSpan?.UpperSpan) cm
-                </span>
-            }
-            else
-            {
-                <span>
-                    @Result?.SkiLength cm
-                </span>
-            }
-        </div>
+<section class="mt-4 p-4 bg-info bg-opacity-10 border-primary rounded">
+    <h2 class="h4 mb-3">Your suggested ski length</h2>
 
-        <div>
+    <div>
+        @if (_useLengthSpan)
+        {
+            <p class="fw-bold">
+                Based on the input, we recommend skis between
+                <span class="text-primary fw-bold">@Result?.SkiLengthSpan?.LowerSpan</span>
+                and
+                <span class="text-primary fw-bold">@Result?.SkiLengthSpan?.UpperSpan cm</span>.
+            </p>
+        } else
+        {
+            <p class="fw-bold">
+                Based on the input, we recommend skis of
+                <span class="text-primary fw-bold">@(Result?.SkiLength) cm</span>.
+            </p>
+        }
+
+        <p class="text-muted fst-italic">
             Happy skiing! :)
-        </div>
+        </p>
     </div>
 </section>
 
