@@ -122,7 +122,7 @@ namespace CrossCountrySkis.Tests.Services
         }
 
         [Fact]
-        public void CalculateSkiLength_ForFreestyleSkiType_ReturnsMaxLengthSpan()
+        public void CalculateSkiLength_ForFreestyleSkiType_ReturnsMaxLength()
         {
             // Arrange
             var formModel = new SkiLengthFormModel
@@ -137,9 +137,29 @@ namespace CrossCountrySkis.Tests.Services
 
             // Assert
             Assert.NotNull(result);
+            Assert.Null(result.SkiLengthSpan);
+            Assert.Equal(192, result.SkiLength);
+        }
+
+        [Fact]
+        public void CalculateSkiLength_ForFreestyleSkiType_ReturnsMaxLengthSpan()
+        {
+            // Arrange
+            var formModel = new SkiLengthFormModel
+            {
+                Length = 180,
+                Age = 50,
+                SkiType = SkiType.Freestyle
+            };
+
+            // Act
+            var result = _skiService.CalculateSkiLength(formModel);
+
+            // Assert
+            Assert.NotNull(result);
             Assert.NotNull(result.SkiLengthSpan);
             Assert.Equal(0, result.SkiLength);
-            Assert.Equal(192, result.SkiLengthSpan.LowerSpan);
+            Assert.Equal(190, result.SkiLengthSpan.LowerSpan);
             Assert.Equal(192, result.SkiLengthSpan.UpperSpan);
         }
 

@@ -16,20 +16,17 @@ namespace CrossCountrySkis.Services
 
         private SuggestedSkiLengthResult CalculateClassicLength(SkiLengthFormModel formModel)
         {
-            var suggestChildren0To4LengthSpan = formModel.Age >= 0 && formModel.Age <= 4;
-            var suggestChildren5To8LengthSpan = formModel.Age >= 5 && formModel.Age <= 8;
+            var (isChildren0To4, isChildren5To8) = IsWithinChildrenAgeGroup(formModel.Age);
             var suggestedSkiLength = formModel.Length + 20;
 
-            if(suggestChildren0To4LengthSpan)
+            if(isChildren0To4)
             {
-                // TODO: Make sure length dont exceed maxlength - or don't need to check (kids 0-4 are probably not that long)?
                 // Use +0cm because it is more strict than the 10-20cm normal span
                 return new SuggestedSkiLengthResult { SkiLength = formModel.Length };
             }
 
-            if (suggestChildren5To8LengthSpan)
+            if (isChildren5To8)
             {
-                // TODO: Make sure span dont exceed maxlength - or don't need to check (kids are probably not that long)?
                 var skiLengthSpan = new SkiLengthSpan(formModel.Length + 10, suggestedSkiLength);
 
                 return new SuggestedSkiLengthResult { SkiLengthSpan = skiLengthSpan };
@@ -45,11 +42,10 @@ namespace CrossCountrySkis.Services
 
         private SuggestedSkiLengthResult CalculateFreestyleLength(SkiLengthFormModel formModel)
         {
-            var suggestChildren0To4LengthSpan = formModel.Age >= 0 && formModel.Age <= 4;
-            var suggestChildren5To8LengthSpan = formModel.Age >= 5 && formModel.Age <= 8;
+            var (isChildren0To4, isChildren5To8) = IsWithinChildrenAgeGroup(formModel.Age);
             var skiLengthSpan = new SkiLengthSpan();
 
-            if(suggestChildren0To4LengthSpan)
+            if(isChildren0To4)
             {
                 return new SuggestedSkiLengthResult { SkiLength = formModel.Length };
             }
@@ -58,7 +54,6 @@ namespace CrossCountrySkis.Services
             skiLengthSpan.LowerSpan = formModel.Length + 10;
             skiLengthSpan.UpperSpan = formModel.Length + 15;
 
-            // TODO: Maybe place this logic at another place?
             if (skiLengthSpan.LowerSpan > MaxFreestyleSkiLength)
             {
                 skiLengthSpan.LowerSpan = MaxFreestyleSkiLength;
@@ -71,6 +66,14 @@ namespace CrossCountrySkis.Services
             }
 
             return new SuggestedSkiLengthResult { SkiLengthSpan = skiLengthSpan };
+        }
+
+        private (bool IsChildren0To4, bool IsChildren5To8) IsWithinChildrenAgeGroup(int age)
+        {
+            var isChildren0To4 = age >= 0 && age <= 4;
+            var isChildren5To8 = age >= 5 && age <= 8;
+
+            return (isChildren0To4, isChildren5To8);
         }
     }
 }
